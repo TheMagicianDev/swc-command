@@ -3,7 +3,7 @@ import path from 'path';
 import { ChildProcess } from 'child_process';
 import {
   swc,
-  pswc,
+  cpSwc,
   swcSync,
   TExecOptions,
   IPwscExecReturn,
@@ -54,7 +54,7 @@ const execConfigTests: {
     },
     expected: {
       stdout: {
-        includes: 'Successfully compiled:'
+        includes: 'Successfully compiled'
       },
       exit: {
         code: 0,
@@ -69,6 +69,74 @@ const execConfigTests: {
 ];
 
 describe('swc', () => {
+  async function testSwc(
+    cliOptionsOverride?: (cliOptions: TPswcExecOptions) => TPswcExecOptions
+  ) {
+    const promises: Promise<IPwscExecReturn>[] = [];
+    const _cliOptionsOverride =
+      cliOptionsOverride || ((cliOptions: TPswcExecOptions) => cliOptions);
+
+    execConfigTests.forEach(({ cliOptions }) => {
+      promises.push(
+        // command call:
+        swc(_cliOptionsOverride(cliOptions), (childProcess) => {
+          expect(!!childProcess).toBeTruthy();
+          expect(childProcess).toBeInstanceOf(ChildProcess);
+        }).catch((error: Error) => {
+          fail(
+            `Command rejected for the following error:\n${JSON.stringify(
+              error,
+              null,
+              4
+            )}\nNo error are expected!`
+          );
+        })
+      );
+    });
+
+    const results = await Promise.all(promises);
+
+    results.forEach((result, index) => {
+      const { expected } = execConfigTests[index];
+      const cliOptions = execConfigTests[index].cliOptions as TPswcExecOptions;
+
+      const dataToInclude: TPswcExecOptions['data'] = cliOptions.data || {
+        stdout: true,
+        stderr: true
+      };
+
+      expect(result.exitCode).toBe(expected.exit.code);
+      expect(result.exitSignal).toBe(expected.exit.signal);
+
+      if (dataToInclude.stdout) {
+        expect(!!result.data.stdout).toBeTruthy();
+        expect(Array.isArray(result.data.stdout)).toBeTruthy();
+        expect(result.data.stdout?.join('')).toContain(
+          expected.stdout.includes
+        );
+      } else {
+        expect(!!result.data.stdout).toBeFalsy();
+      }
+
+      if (dataToInclude.stderr) {
+        expect(Array.isArray(result.data.stderr)).toBeTruthy();
+        if (result.data.stderr) {
+          expect(result.data.stderr.length > 0).toBeFalsy();
+        } else {
+          fail('stderr should exist and be an array!');
+        }
+      } else {
+        expect(!!result.data.stderr).toBeFalsy();
+      }
+    });
+  }
+  test('promise spawn version successfully compile', async () => testSwc());
+  test('promise spawn version successfully compile with exit as resolveEvent', async () =>
+    testSwc((cliOptions) => ({
+      ...cliOptions,
+      resolveEvent: 'exit'
+    })));
+
   test('child process spawn for a compilation that should happen correctly', () =>
     new Promise((resolve) => {
       execConfigTests.forEach(({ cliOptions, expected }) => {
@@ -124,7 +192,7 @@ describe('swc', () => {
         }
 
         // command call:
-        const childProcess = swc(cliOptions)
+        const childProcess = cpSwc(cliOptions)
           .on('close', (code, signal) => {
             events.push('close');
             closeData.code = code;
@@ -153,74 +221,6 @@ describe('swc', () => {
         });
       });
     }));
-
-  async function testPswc(
-    cliOptionsOverride?: (cliOptions: TPswcExecOptions) => TPswcExecOptions
-  ) {
-    const promises: Promise<IPwscExecReturn>[] = [];
-    const _cliOptionsOverride =
-      cliOptionsOverride || ((cliOptions: TPswcExecOptions) => cliOptions);
-
-    execConfigTests.forEach(({ cliOptions }) => {
-      promises.push(
-        // command call:
-        pswc(_cliOptionsOverride(cliOptions), (childProcess) => {
-          expect(!!childProcess).toBeTruthy();
-          expect(childProcess).toBeInstanceOf(ChildProcess);
-        }).catch((error: Error) => {
-          fail(
-            `Command rejected for the following error:\n${JSON.stringify(
-              error,
-              null,
-              4
-            )}\nNo error are expected!`
-          );
-        })
-      );
-    });
-
-    const results = await Promise.all(promises);
-
-    results.forEach((result, index) => {
-      const { expected } = execConfigTests[index];
-      const cliOptions = execConfigTests[index].cliOptions as TPswcExecOptions;
-
-      const dataToInclude: TPswcExecOptions['data'] = cliOptions.data || {
-        stdout: true,
-        stderr: true
-      };
-
-      expect(result.exitCode).toBe(expected.exit.code);
-      expect(result.exitSignal).toBe(expected.exit.signal);
-
-      if (dataToInclude.stdout) {
-        expect(!!result.data.stdout).toBeTruthy();
-        expect(Array.isArray(result.data.stdout)).toBeTruthy();
-        expect(result.data.stdout?.join('')).toContain(
-          expected.stdout.includes
-        );
-      } else {
-        expect(!!result.data.stdout).toBeFalsy();
-      }
-
-      if (dataToInclude.stderr) {
-        expect(Array.isArray(result.data.stderr)).toBeTruthy();
-        if (result.data.stderr) {
-          expect(result.data.stderr.length > 0).toBeFalsy();
-        } else {
-          fail('stderr should exist and be an array!');
-        }
-      } else {
-        expect(!!result.data.stderr).toBeFalsy();
-      }
-    });
-  }
-  test('promise spawn version successfully compile', async () => testPswc());
-  test('promise spawn version successfully compile with exit as resolveEvent', async () =>
-    testPswc((cliOptions) => ({
-      ...cliOptions,
-      resolveEvent: 'exit'
-    })));
 
   test('sync version compile and work correctly', () => {
     execConfigTests.forEach(({ cliOptions, expected }) => {

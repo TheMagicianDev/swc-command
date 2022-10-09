@@ -12,7 +12,8 @@ export type TExecOptions = TCommandOptions & {
 };
 
 /**
- * Build the cli command from the cli options and execute it using spawn.
+ * swc child process version
+ * Build the cli command from the cli options and execute it using spawn. Return a child process
  * @param {TExecOptions} cliOptions - cli options to exec the command with.
  * Equivalent to the official cli where --out-dir <=> outDir (camelCase mapping).
  * Check the official cli documentation https://swc.rs/docs/usage/cli for the arguments details.
@@ -25,11 +26,11 @@ export type TExecOptions = TCommandOptions & {
  * ```
  * @param {TExecSpawnOptions} spawnOptions.encoding - That property was added by swc-command
  * (spawn doesn't have it). It set the encoding for childProcess.stdout, childProcess.stderr.
- * By default if not provided, it gonna be of buffer type (no encoding).
+ * By default if not provided, it gonna be of utf8 encoding (string).
  * @returns {ChildProcess} - ChildProcess instance of the spawn command. You can listen to the
  * `close`, `exit` events. And stdout, stderr `data` event (`stdout.on('data', (data) => ...)`).
  */
-export function swc(cliOptions: TExecOptions): ChildProcess {
+export function cpSwc(cliOptions: TExecOptions): ChildProcess {
   const [npxCmd, ...args] = buildCommandArgs(cliOptions, ['spawnOptions']);
 
   const childProcess = spawn(npxCmd, args, {
@@ -67,7 +68,6 @@ export interface IPwscExecReturn {
 }
 
 /**
- * The swc promise version
  * Build the cli command from the cli options and execute it using spawn and return a promise.
  * @param {TExecOptions} cliOptions - cli options to exec the command with.
  * Equivalent to the official cli where --out-dir <=> outDir (camelCase mapping).
@@ -75,7 +75,7 @@ export interface IPwscExecReturn {
  * @param {SpawnOptions} spawnOptions - spawnOptions that can override default spawn options.
  * @param {TExecSpawnOptions} spawnOptions.encoding - That property was added by swc-command
  * (spawn doesn't have it). It set the encoding for childProcess.stdout, childProcess.stderr.
- * By default if not provided, it gonna be of buffer type (no encoding).
+ * By default if not provided, it gonna be of utf8 encoding (string).
  * @param {TExecOptions} cliOptions.resolveEvent - choose what event the promise resolve on 'close'
  * or 'exit'. It default to 'close'
  * @param {TExecOptions} cliOptions.data - an object provide which output streams you want to catch
@@ -89,7 +89,7 @@ export interface IPwscExecReturn {
  * The promise will reject if an error occurs (fail to spawn, kill failed).
  * @example
  */
-export function pswc(
+export function swc(
   cliOptions: TPswcExecOptions,
   childProcessCallback?: (childProcess: ChildProcess) => void
 ): Promise<IPwscExecReturn> {
@@ -107,7 +107,7 @@ export function pswc(
   const resolveEvent = _resolveEvent || 'close';
 
   return new Promise((resolve, reject) => {
-    const childProcess: ChildProcess = swc(swcCliOptions);
+    const childProcess: ChildProcess = cpSwc(swcCliOptions);
 
     if (childProcessCallback) {
       childProcessCallback(childProcess);
@@ -173,9 +173,8 @@ export type TSwcSyncExecOptions = TExecOptions & {
  * @param {SpawnSyncOptionsWithBufferEncoding} spawnOptions - sync spawn options that can override
  * default spawn options. You can provide the encoding value to select what kind of output type u
  * want to get (String, Buffer)
- * @param {SpawnSyncOptionsWithBufferEncoding} spawnOptions.encoding - the default is 'buffer'
- * (no encoding).
- * You can use 'utf8' if you want to get output as string.
+ * @param {SpawnSyncOptionsWithBufferEncoding} spawnOptions.encoding - the default is 'utf8'
+ * (string).
  * @returns {ChildProcess} - ChildProcess instance of the spawn command. You can listen to the
  * `close`, `exit` events. And stdout, stderr `data` event (`stdout.on('data', (data) => ...)`).
  * @example

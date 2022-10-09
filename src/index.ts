@@ -13,7 +13,7 @@ export type {
   TCommandOptions
 } from './buildCommand';
 
-export { swc, pswc, swcSync } from './execCommand';
+export { swc, cpSwc, swcSync } from './execCommand';
 
 export type {
   TExecOptions,
@@ -22,3 +22,5 @@ export type {
   IPwscExecReturn,
   TSwcSyncExecOptions
 } from './execCommand';
+
+export { isCompilationSuccessful } from './utils';
