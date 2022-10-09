@@ -1,0 +1,41 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": ["./tsconfig.json"],
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "extends": [
+    "plugin:prettier/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "airbnb-base",
+    "airbnb-typescript/base"
+  ],
+  "plugins": ["@typescript-eslint", "prettier"],
+  "rules": {
+    "quotes": [
+      "error",
+      "single",
+      { "avoidEscape": true, "allowTemplateLiterals": false }
+    ],
+    "class-methods-use-this": "off",
+    "import/prefer-default-export": "off",
+    "@typescript-eslint/no-explicit-any": "warn",
+    "no-underscore-dangle": "off",
+    "@typescript-eslint/naming-convention": "off",
+    "no-prototype-builtins": "off",
+    "@typescript-eslint/indent": "off",
+    "object-curly-newline":"off",
+    "operator-linebreak": "off",
+    "implicit-arrow-linebreak": "off",
+    "function-paren-newline": "off",
+    "@typescript-eslint/comma-dangle": "off",
+    "import/extensions": "off",
+    "no-plusplus": "off",
+    "no-async-promise-executor": "off"
+  }
+}

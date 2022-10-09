@@ -1,0 +1,4 @@
+node_modules
+_scripts
+coverage
+dist
