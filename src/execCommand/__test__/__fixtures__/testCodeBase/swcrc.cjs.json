@@ -1,0 +1,16 @@
+{
+  "jsc": {
+    "parser": {
+      "decorators": true,
+      "syntax": "typescript",
+      "dynamicImport": true
+    },
+    "externalHelpers": true,
+    "target": "es5"
+  },
+  "minify": true,
+  "module": {
+    "type": "commonjs"
+  },
+  "sourceMaps": true
+}
