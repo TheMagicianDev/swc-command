@@ -1,6 +1,6 @@
 {
   "name": "swc-command",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "SWC nodejs api to run swc cli seamlessly from node. Intended for main usage with programmatic build scripts.",
   "keywords": [
     "swc",
