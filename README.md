@@ -23,7 +23,6 @@
 </div>
 
 <hr>
-<br>
 
 SWC nodejs api to run swc cli seamlessly from node. Intended for main usage with programmatic build scripts.
 
