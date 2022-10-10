@@ -3,22 +3,27 @@
 ![swc command cli node api banner](./imgs/banner_black.png)
 
 <div align="center">
+  <a href="https://www.npmjs.org/package/swc-command" alt="npm version">
+    <img src="https://img.shields.io/npm/v/swc-command.svg?style=flat-square"/>
+  </a>
   <a href="https://github.com/TheMagicianDev/swc-command/actions?query=workflow%3ACI+branch%3Amain">
     <img src="https://img.shields.io/github/workflow/status/TheMagicianDev/swc-command/CI/main" alt="Build Status">
   </a>
   <a href='https://coveralls.io/github/TheMagicianDev/swc-command?branch=main'>
     <img src='https://coveralls.io/repos/github/TheMagicianDev/swc-command/badge.svg?branch=main' alt='Coverage Status' />
   </a>
+  <a href='LICENSE'>
+    <img src='https://img.shields.io/badge/license-MIT-blue.svg?style=flat' alt='Coverage Status' />
+  </a>
 </div>
 
 <div align="center">
-  <a href="">npm page</a>, 
+  <a href="https://www.npmjs.com/package/swc-command">npm page</a>, 
   <a href="https://github.com/TheMagicianDev/swc-command">repo page</a>
 </div>
 
-<div align="center">
-  <iframe src="https://ghbtns.com/github-btn.html?user=TheMagicianDev&repo=swc-command&type=star&count=true&size=large" frameborder="0" scrolling="0" width="170" height="30" title="GitHub"></iframe>
-</div>
+<hr>
+<br>
 
 SWC nodejs api to run swc cli seamlessly from node. Intended for main usage with programmatic build scripts.
 
@@ -224,7 +229,7 @@ interface SpawnSyncReturns<T> {
 
 Worth noting for the `cliOptions`. `spawnOptions` is the same. And `encoding` default to `'utf8'`. And `stdio` to `'pipe'`.
 
-## cpswc() [promise version]
+## cpswc() [child process version]
 
 You may want to use this version if you don't want to buffer. In a wide repo. Where you compile and output to console. And you use that to process it on a stream based nature.
 
