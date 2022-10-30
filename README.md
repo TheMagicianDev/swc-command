@@ -293,3 +293,17 @@ if (isCompilationSuccessful(data.stdout)) {
 You can compile files programmatically using official `@swc/core` package. The api only allow to manage one file at a time. And if you combine it with `fast-glob`. Then you'll be able to compile multiple files and using globs as well.
 
 `swc-command` on the other hand. Would always give you the ability to run the cli. With all it's features from node seamlessly. And that may be more powerful. And what you would want to do most of the time.
+
+## Notes
+
+Make sure you install `swc-command@v1.0.3` at least. Because it does update @swc/core version to `1.3.11`. To fix the problem bellow:
+
+Prior `v1.3.5` the cli **exclude** argument wasn't working.
+
+The fix i wrote was merged on `1.3.5` of @swc/core.
+
+For more details:
+
+Issue: https://github.com/swc-project/swc/issues/6009
+
+PR: https://github.com/swc-project/swc/pull/6054
