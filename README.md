@@ -3,11 +3,12 @@
 ![swc command cli node api banner](./imgs/banner_black.png)
 
 <div align="center">
-  <a href="https://www.npmjs.org/package/swc-command" alt="npm version">
-    <img src="https://img.shields.io/npm/v/swc-command.svg?style=flat-square"/>
+  <a href="https://www.npmjs.org/package/swc-command" 
+  >
+    <img src="https://img.shields.io/npm/v/swc-command.svg?style=flat-square" alt="npm version"/>
   </a>
   <a href="https://github.com/TheMagicianDev/swc-command/actions?query=workflow%3ACI+branch%3Amain">
-    <img src="https://img.shields.io/github/workflow/status/TheMagicianDev/swc-command/CI/main" alt="Build Status">
+    <img src="https://img.shields.io/github/actions/workflow/status/TheMagicianDev/swc-command/ci.yml?branch=main" alt="Build Status">
   </a>
   <a href='https://coveralls.io/github/TheMagicianDev/swc-command?branch=main'>
     <img src='https://coveralls.io/repos/github/TheMagicianDev/swc-command/badge.svg?branch=main' alt='Coverage Status' />
@@ -20,6 +21,7 @@
 <div align="center">
   <a href="https://www.npmjs.com/package/swc-command">npm page</a>, 
   <a href="https://github.com/TheMagicianDev/swc-command">repo page</a>
+  <a href="https://github.com/TheMagicianDev/swc-command" style="color: yellow; text-decoration: inherit;">Star me ⭐💫</a>
 </div>
 
 <hr>
